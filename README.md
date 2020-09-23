@@ -20,7 +20,7 @@ setter call. Consider the following example:
 ```jsx
 import React, { useState, useCallback } from 'react';
 
-export default function BathedUpdateTest() {
+export default function BatchedUpdateTest() {
   const [a, setA] = useState(0);
   const [b, setB] = useState(0);
 
@@ -56,7 +56,7 @@ in place of ```React.useState``` wherever you want updates to batch:
 import React, { useCallback } from 'react';
 import useBatchedState from 'react-use-batched-state';
 
-export default function BathedUpdateTest() {
+export default function BatchedUpdateTest() {
   const [a, setA] = useBatchedState(0);
   const [b, setB] = useBatchedState(0);
 
