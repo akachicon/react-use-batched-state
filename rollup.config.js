@@ -7,7 +7,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const baseConfig = {
   input: './lib/index.ts',
-  external: [/\/@babel\/runtime/, /\/core-js-pure\//, 'react', 'react-dom'],
+  external: [/@babel\/runtime/, /core-js-pure\//, 'react', 'react-dom'],
   plugins: [
     resolve(),
     commonjs(),
