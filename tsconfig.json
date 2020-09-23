@@ -1,0 +1,23 @@
+{
+  "include": ["**/*.ts"],
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "moduleResolution": "node",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "forceConsistentCasingInFileNames": true,
+    "tsBuildInfoFile": "node_modules/.cache/ts-build-info"
+  }
+}

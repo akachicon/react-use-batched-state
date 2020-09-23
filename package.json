@@ -1,0 +1,74 @@
+{
+  "name": "react-use-batched-state",
+  "version": "1.0.0",
+  "description": "React hook similar to `setState` but allowing for batched updates",
+  "keywords": [
+    "react",
+    "hook",
+    "batch",
+    "state"
+  ],
+  "license": "MIT",
+  "author": "Denis Zharenko <akachicon@gmail.com>",
+  "repository": "https://github.com/akachicon/react-use-batched-state",
+  "homepage": "https://github.com/akachicon/react-use-batched-state",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.mjs",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "types"
+  ],
+  "types": "types/index.cjs.d.ts",
+  "scripts": {
+    "build:es": "rollup -c --environment MODULE_FORMAT:es",
+    "build:cjs": "rollup -c --environment MODULE_FORMAT:cjs",
+    "build:umd": "rollup -c --environment MODULE_FORMAT:umd",
+    "build": "rimraf dist && npm run build:cjs && npm run build:es && npm run build:umd",
+    "postbuild": "npm run copy:declarations",
+    "build:dev": "cross-env NODE_ENV=development npm run build",
+    "build:prod": "cross-env NODE_ENV=production npm run build",
+    "ts:compile": "tsc",
+    "copy:declarations": "copyfiles -u 1 \"types/*.d.ts\" dist",
+    "prettier": "prettier --check \"**/*.(ts|tsx|js|mjs|jsx)\"",
+    "prettier:fix": "prettier --write \"**/*.(ts|tsx|js|mjs|jsx)\"",
+    "eslint": "eslint --ext .ts,.tsx,.js,.mjs,.jsx .",
+    "eslint:fix": "npm run eslint -- --fix",
+    "lint": "npm run prettier && npm run eslint",
+    "lint:fix": "npm run prettier:fix && npm run eslint:fix"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.11.2",
+    "@types/react": "^16.9.49"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.10.4",
+    "@rollup/plugin-babel": "^5.2.1",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@types/react-dom": "^16.9.8",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "babel-plugin-polyfill-corejs3": "0.0.5",
+    "copyfiles": "^2.3.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.27.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.0.3"
+  },
+  "peerDependencies": {
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3"
+  }
+}
