@@ -1,4 +1,5 @@
 const umd = process.env.MODULE_FORMAT === 'umd';
+const es = process.env.MODULE_FORMAT === 'es';
 
 module.exports = {
   plugins: [
@@ -6,7 +7,7 @@ module.exports = {
       '@babel/plugin-transform-runtime',
       {
         regenerator: false,
-        useESModules: true,
+        useESModules: es,
         helpers: !umd,
         version: '^7.11.6',
       },

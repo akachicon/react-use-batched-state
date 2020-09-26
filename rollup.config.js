@@ -24,7 +24,7 @@ const esConfig = {
   ...baseConfig,
   output: {
     format: 'es',
-    file: './dist/index.es.mjs',
+    file: './dist/index.es.js',
     interop: 'auto',
     indent: false,
     sourcemap: !isProd && 'inline',
