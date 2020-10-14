@@ -40,6 +40,6 @@ const useBatchedState = <S = undefined>(initValue: S | (() => S)) => {
   return stateHookRes;
 };
 
-const exportedHook = window === undefined ? useState : useBatchedState;
+const exportedHook = typeof window === 'undefined' ? useState : useBatchedState;
 
 export default exportedHook;
