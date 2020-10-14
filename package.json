@@ -1,6 +1,6 @@
 {
   "name": "react-use-batched-state",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "React hook similar to `setState` but allowing for batched updates",
   "keywords": [
     "react",
