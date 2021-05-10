@@ -1,11 +1,23 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { unstable_batchedUpdates as batch } from 'react-dom';
 
 type UpdateRecord = [(value: any) => void, unknown];
 type UpdateRecordList = UpdateRecord[];
 
-let updates: UpdateRecordList = [];
+const updates: { list: UpdateRecordList } = { list: [] };
 let updatePromise: Promise<void> | null = null;
+
+function pushUpdate(updateRecord: UpdateRecord): void {
+  updates.list.push(updateRecord);
+}
+
+function flushUpdates(): void {
+  updates.list = [];
+}
+
+function getUpdates() {
+  return updates.list;
+}
 
 const scheduleBatchUpdate = () => {
   if (updatePromise) return;
@@ -14,12 +26,14 @@ const scheduleBatchUpdate = () => {
 
   void updatePromise.then(() => {
     batch(() => {
+      const updates = getUpdates();
+
       for (let it = 0; it < updates.length; it++) {
         const [setter, val] = updates[it];
         setter(val);
       }
     });
-    updates = [];
+    flushUpdates();
     updatePromise = null;
   });
 };
@@ -28,12 +42,15 @@ const useBatchedState = <S = undefined>(initValue: S | (() => S)) => {
   const stateHookRes = useState<S>(initValue);
   const setter = stateHookRes[1];
 
-  function batchSetter(value: S | ((prevState: S) => S)) {
-    const setterUpdate: UpdateRecord = [setter, value];
+  const batchSetter = useCallback(
+    (value: S | ((prevState: S) => S)) => {
+      const setterUpdate: UpdateRecord = [setter, value];
 
-    updates.push(setterUpdate);
-    scheduleBatchUpdate();
-  }
+      pushUpdate(setterUpdate);
+      scheduleBatchUpdate();
+    },
+    [setter]
+  );
 
   stateHookRes[1] = batchSetter;
 
