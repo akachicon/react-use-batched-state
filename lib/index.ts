@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { unstable_batchedUpdates as batch } from 'react-dom';
+import type { Dispatch, SetStateAction } from 'react';
 
 type UpdateRecord = [(value: any) => void, unknown];
 type UpdateRecordList = UpdateRecord[];
@@ -42,8 +43,8 @@ const useBatchedState = <S = undefined>(initValue: S | (() => S)) => {
   const stateHookRes = useState<S>(initValue);
   const setter = stateHookRes[1];
 
-  const batchSetter = useCallback(
-    (value: S | ((prevState: S) => S)) => {
+  const batchSetter = useCallback<Dispatch<SetStateAction<S>>>(
+    (value) => {
       const setterUpdate: UpdateRecord = [setter, value];
 
       pushUpdate(setterUpdate);
