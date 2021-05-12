@@ -5,36 +5,24 @@ import type { Dispatch, SetStateAction } from 'react';
 type UpdateRecord = [(value: any) => void, unknown];
 type UpdateRecordList = UpdateRecord[];
 
-const updates: { list: UpdateRecordList } = { list: [] };
+let updates: UpdateRecordList = [];
 let updatePromise: Promise<void> | null = null;
 
-function pushUpdate(updateRecord: UpdateRecord): void {
-  updates.list.push(updateRecord);
-}
+const scheduleBatchUpdate = (updateRecord: UpdateRecord) => {
+  updates.push(updateRecord);
 
-function flushUpdates(): void {
-  updates.list = [];
-}
-
-function getUpdates() {
-  return updates.list;
-}
-
-const scheduleBatchUpdate = () => {
   if (updatePromise) return;
 
   updatePromise = Promise.resolve();
 
   void updatePromise.then(() => {
     batch(() => {
-      const updates = getUpdates();
-
       for (let it = 0; it < updates.length; it++) {
         const [setter, val] = updates[it];
         setter(val);
       }
     });
-    flushUpdates();
+    updates = [];
     updatePromise = null;
   });
 };
@@ -46,9 +34,7 @@ const useBatchedState = <S = undefined>(initValue: S | (() => S)) => {
   const batchSetter = useCallback<Dispatch<SetStateAction<S>>>(
     (value) => {
       const setterUpdate: UpdateRecord = [setter, value];
-
-      pushUpdate(setterUpdate);
-      scheduleBatchUpdate();
+      scheduleBatchUpdate(setterUpdate);
     },
     [setter]
   );
