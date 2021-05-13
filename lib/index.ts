@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { unstable_batchedUpdates as batch } from 'react-dom';
+import type { Dispatch, SetStateAction } from 'react';
 
 type UpdateRecord = [(value: any) => void, unknown];
 type UpdateRecordList = UpdateRecord[];
@@ -7,7 +8,9 @@ type UpdateRecordList = UpdateRecord[];
 let updates: UpdateRecordList = [];
 let updatePromise: Promise<void> | null = null;
 
-const scheduleBatchUpdate = () => {
+const scheduleBatchUpdate = (updateRecord: UpdateRecord) => {
+  updates.push(updateRecord);
+
   if (updatePromise) return;
 
   updatePromise = Promise.resolve();
@@ -28,12 +31,13 @@ const useBatchedState = <S = undefined>(initValue: S | (() => S)) => {
   const stateHookRes = useState<S>(initValue);
   const setter = stateHookRes[1];
 
-  function batchSetter(value: S | ((prevState: S) => S)) {
-    const setterUpdate: UpdateRecord = [setter, value];
-
-    updates.push(setterUpdate);
-    scheduleBatchUpdate();
-  }
+  const batchSetter = useCallback<Dispatch<SetStateAction<S>>>(
+    (value) => {
+      const setterUpdate: UpdateRecord = [setter, value];
+      scheduleBatchUpdate(setterUpdate);
+    },
+    [setter]
+  );
 
   stateHookRes[1] = batchSetter;
 
