@@ -1,3 +1,6 @@
+# Deprecation note
+Since react 18 state updates are batched automatically. Thus, use of this module only makes sense if you use react < 18.
+
 # react-use-batched-state
 A hook that allows for batched updates in react.
 
